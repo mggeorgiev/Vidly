@@ -14,11 +14,11 @@ else
 {
     <table>
         <tr>Customers</tr>
-        @foreach (var customer in Model.Customers)
+        @foreach (var customer in Model)
         {
             <tr>
                 <th>
-                    @Html.ActionLink(@customer.Name, "Details", "Customers", new { id=@customer.Id}, null)
+                    @Html.ActionLink(customer.Name, "Details", "Customers", new { id=@customer.Id}, null)
                 </th>
             </tr>
          }

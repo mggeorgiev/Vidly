@@ -24,7 +24,8 @@ namespace Vidly.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = GetCustomers();
+            //defered execution
+            var customers = _context.Customers;
 
             return View(customers);
         }
@@ -32,21 +33,12 @@ namespace Vidly.Controllers
         [Route("customers/details/{id}")]
         public ActionResult Details(int Id)
         {
-            var customer = GetCustomers().SingleOrDefault(c => c.Id == Id);
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == Id);
 
             if (customer == null)
                 return HttpNotFound();
 
             return View(customer);
-        }
-
-        private IEnumerable<Customer> GetCustomers()
-        {
-            return new List<Customer>
-            {
-                new Customer { Id=1, Name="John Smith"},
-                new Customer { Id=2, Name="Mary Williams"}
-            };
         }
     }
 }
