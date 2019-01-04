@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Linq;
 using Vidly.Models;
+
 using Vidly.ViewModels;
 
 namespace Vidly.Controllers
@@ -11,38 +13,29 @@ namespace Vidly.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            var customers = new List<Customer>
-            {
-                new Customer { Name="John Smith", Id=1},
-                new Customer { Name="Mary Williams", Id=2}
-            };
+            var customers = GetCustomers();
 
-            var viewModel = new CustomersViewModel
-            {
-                Customers = customers
-            };
-
-            return View(viewModel);
+            return View(customers);
         }
 
         [Route("customers/details/{id}")]
-        public ActionResult Details(int? Id)
+        public ActionResult Details(int Id)
         {
-            var customer = new Customer();
+            var customer = GetCustomers().SingleOrDefault(c => c.Id == Id);
 
-            switch (Id)
-            {
-                case 1:
-                    customer.Name = "John Smith";
-                    break;
-                case 2:
-                    customer.Name = "Mary Williams";
-                    break;
-                default:
-                    customer.Name = "Error";
-                    break;
-            }
+            if (customer == null)
+                return HttpNotFound();
+
             return View(customer);
+        }
+
+        private IEnumerable<Customer> GetCustomers()
+        {
+            return new List<Customer>
+            {
+                new Customer { Id=1, Name="John Smith"},
+                new Customer { Id=2, Name="Mary Williams"}
+            };
         }
     }
 }
