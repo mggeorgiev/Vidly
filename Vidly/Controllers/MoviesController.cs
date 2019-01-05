@@ -13,20 +13,11 @@ namespace Vidly.Controllers
         // GET: Movies
         public ActionResult Index()
         {
-            //var movie = new Movie() { Name = "Shrek!" };
 
-            var movie = new List<Movie>
-            {
-                new Movie { Name="Shrek!"},
-                new Movie { Name="Wall-e"}
-            };
+            var movies = GetMovies();
 
-            var viewModel = new CustomersViewModel
-            {
-                Movies = movie
-            };
 
-            return View(viewModel);
+            return View(movies);
         }
 
         public ActionResult Random(int? pageIndex, string sortBy)
@@ -34,14 +25,23 @@ namespace Vidly.Controllers
             if (!pageIndex.HasValue)
                 pageIndex = 1;
             if (String.IsNullOrWhiteSpace(sortBy))
-                sortBy = "Name"; 
-            return Content(String.Format("pageIndex ={0}&sortBy={1}",pageIndex,sortBy));
+                sortBy = "Name";
+            return Content(String.Format("pageIndex ={0}&sortBy={1}", pageIndex, sortBy));
         }
 
         [Route("movies/released/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1,12)}")]
         public ActionResult ByReleaseDate(int year, int month)
         {
             return Content(year + "/" + month);
+        }
+
+        private IEnumerable<Movie> GetMovies()
+        {
+            return new List<Movie>
+            {
+                new Movie { Name = "Shrek!" },
+                new Movie { Name = "Wall-e" }
+            };
         }
     }
 }
