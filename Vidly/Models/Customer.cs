@@ -18,6 +18,7 @@ namespace Vidly.Models
 
         public byte MembershipTypeId { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd / MM / yyyy}")]
+        public DateTime? DateOfBirth { get; set; }
     }
 }

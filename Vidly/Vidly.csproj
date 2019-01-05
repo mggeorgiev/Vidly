@@ -219,6 +219,10 @@
     <Compile Include="Migrations\201901051550596_AddDateOfBirthToCustomer.Designer.cs">
       <DependentUpon>201901051550596_AddDateOfBirthToCustomer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901051821218_UpdateDatetimeToNullable.cs" />
+    <Compile Include="Migrations\201901051821218_UpdateDatetimeToNullable.Designer.cs">
+      <DependentUpon>201901051821218_UpdateDatetimeToNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -342,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901051550596_AddDateOfBirthToCustomer.resx">
       <DependentUpon>201901051550596_AddDateOfBirthToCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901051821218_UpdateDatetimeToNullable.resx">
+      <DependentUpon>201901051821218_UpdateDatetimeToNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
