@@ -6,16 +6,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Vidly.Models
 {
-    public class Movie
+    public class GenreType
     {
         public int Id { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [StringLength(20)]
         public string Name { get; set; }
-
-        public GenreType GenreType { get; set; }
-
-        public int GenreTypeId { get; set; }
     }
 }
