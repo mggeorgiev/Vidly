@@ -17,5 +17,11 @@ namespace Vidly.Models
         public GenreType GenreType { get; set; }
 
         public int GenreTypeId { get; set; }
+
+        public DateTime? ReleaseDate { get; set; }
+
+        public DateTime? DateAdded { get; set; }
+
+        public int NumberInStock { get; set; }
     }
 }

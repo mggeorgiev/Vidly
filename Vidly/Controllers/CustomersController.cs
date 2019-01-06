@@ -25,6 +25,12 @@ namespace Vidly.Controllers
             _context.Dispose();
         }
 
+        public ActionResult New()
+        {
+            return View();
+        }
+        
+
         public ViewResult Index()
         {
             //defered execution - executed during iteration over the customers object

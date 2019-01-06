@@ -26,7 +26,17 @@ namespace Vidly.Controllers
         public ActionResult Index()
         {
 
-            var movies = GetMovies();
+            var movies = _context.Movies.Include("GenreType").ToList();
+
+
+            return View(movies);
+        }
+
+        // GET: Details
+        public ActionResult Details(int Id)
+        {
+
+            var movies = _context.Movies.Include("GenreType").SingleOrDefault(m => m.Id == Id);
 
 
             return View(movies);
@@ -45,15 +55,6 @@ namespace Vidly.Controllers
         public ActionResult ByReleaseDate(int year, int month)
         {
             return Content(year + "/" + month);
-        }
-
-        private IEnumerable<Movie> GetMovies()
-        {
-            return new List<Movie>
-            {
-                new Movie { Name = "Shrek!" },
-                new Movie { Name = "Wall-e" }
-            };
         }
     }
 }
