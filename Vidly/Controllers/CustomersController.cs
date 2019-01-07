@@ -27,9 +27,23 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            return View();
+            var membershipTypes = _context.MembershipTypes.ToList();
+
+            var viewModel = new NewCustomerViewModel
+            {
+                MembershipType = membershipTypes
+            };
+            return View(viewModel);
         }
         
+        [HttpPost] //do not alow to be called from the get method
+        public ActionResult Create(Customer customer)
+        {
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Customers");
+        }
 
         public ViewResult Index()
         {
