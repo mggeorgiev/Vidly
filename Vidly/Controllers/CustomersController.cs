@@ -37,9 +37,22 @@ namespace Vidly.Controllers
         }
         
         [HttpPost] //do not alow to be called from the get method
-        public ActionResult Create(Customer customer)
+        public ActionResult Save(Customer customer)
         {
-            _context.Customers.Add(customer);
+            if(customer.Id == 0)
+            {
+                _context.Customers.Add(customer);
+            }
+            else
+            {
+                var customerInDB = _context.Customers.Single(c => c.Id == customer.Id);
+
+                customerInDB.Id = customer.Id;
+                customerInDB.Name = customer.Name;
+                customerInDB.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+                customerInDB.MembershipTypeId = customer.MembershipTypeId;
+            }
+            
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Customers");
