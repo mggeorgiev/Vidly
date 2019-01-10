@@ -56,5 +56,17 @@ namespace Vidly.Controllers
         {
             return Content(year + "/" + month);
         }
+
+        public ActionResult New ()
+        {
+            var genreTypes = _context.GenreTypes.ToList();
+
+            var viewModel = new MovieFormViewModel
+            {
+                GenreTypes = genreTypes
+            };
+
+            return View("MovieForm", viewModel);
+        }
     }
 }
