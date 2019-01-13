@@ -239,6 +239,18 @@
     <Compile Include="Migrations\201901102213024_CreateGenreTypes.Designer.cs">
       <DependentUpon>201901102213024_CreateGenreTypes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901121422485_AddNewMoview.cs" />
+    <Compile Include="Migrations\201901121422485_AddNewMoview.Designer.cs">
+      <DependentUpon>201901121422485_AddNewMoview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901121540028_RenameGenre.cs" />
+    <Compile Include="Migrations\201901121540028_RenameGenre.Designer.cs">
+      <DependentUpon>201901121540028_RenameGenre.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901121548351_RenameGenre1.cs" />
+    <Compile Include="Migrations\201901121548351_RenameGenre1.Designer.cs">
+      <DependentUpon>201901121548351_RenameGenre1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -383,6 +395,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901102213024_CreateGenreTypes.resx">
       <DependentUpon>201901102213024_CreateGenreTypes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901121422485_AddNewMoview.resx">
+      <DependentUpon>201901121422485_AddNewMoview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901121540028_RenameGenre.resx">
+      <DependentUpon>201901121540028_RenameGenre.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901121548351_RenameGenre1.resx">
+      <DependentUpon>201901121548351_RenameGenre1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

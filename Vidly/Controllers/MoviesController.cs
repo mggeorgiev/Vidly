@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
+using System.Data.Entity;
 
 namespace Vidly.Controllers
 {
@@ -23,14 +24,25 @@ namespace Vidly.Controllers
         }
 
         // GET: Movies
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
+            string searchString = id;
 
-            var movies = _context.Movies.Include("GenreType").ToList();
+            //var movies = _context.Movies.Include("GenreType").ToList();
+            var movies = (from m in _context.Movies
+                             join g in _context.GenreTypes on m.GenreTypeId equals g.Id
+                             select m).Include("GenreType");
 
-
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                movies = movies.Where(m => m.Name.Contains(searchString));
+            }
+            /*
+            var movies = tempMovies.ToList();
+            */
+            //tempMovies = tempMovies.ToList();
             return View(movies);
-        }
+            }
 
         // GET: Details
         public ActionResult Details(int Id)
