@@ -24,9 +24,18 @@ namespace Vidly.Controllers
         }
 
         // GET: Movies
-        public ActionResult Index(string id)
+        public ActionResult Index(string movieGenre, string searchString)
         {
-            string searchString = id;
+            var GenreLst = new List<string>();
+
+            var GenreQry = from g in _context.GenreTypes
+                           orderby g.Name
+                           select g.Name;
+
+            GenreLst.AddRange(GenreQry.Distinct());
+
+
+            ViewBag.movieGenre = new SelectList(GenreLst);
 
             //var movies = _context.Movies.Include("GenreType").ToList();
             var movies = (from m in _context.Movies
@@ -37,6 +46,12 @@ namespace Vidly.Controllers
             {
                 movies = movies.Where(m => m.Name.Contains(searchString));
             }
+
+            if (!String.IsNullOrEmpty(movieGenre))
+            {
+                movies = movies.Where(m => m.GenreType.Name.Contains(movieGenre));
+            }
+
             /*
             var movies = tempMovies.ToList();
             */
