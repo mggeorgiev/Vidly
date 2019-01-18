@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 using Vidly.Models;
 using Vidly.ViewModels;
-using System.Data.Entity;
+using PagedList;
 
 namespace Vidly.Controllers
 {
@@ -24,8 +24,27 @@ namespace Vidly.Controllers
         }
 
         // GET: Movies
-        public ActionResult Index(string movieGenre, string searchString)
+        public ActionResult Index(string movieGenre, string searchString, string sortOrder, string currentFilter, int? page)
         {
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.GenreSortParam = sortOrder == "Genre" ? "genre_desc" : "Genre" ;
+            ViewBag.ItemsSortParam = sortOrder == "Items" ? "items_desc" : "Items";
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.CurrentGenre = movieGenre;
+            ViewBag.CurrentSearch = searchString;
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             var GenreLst = new List<string>();
 
             var GenreQry = from g in _context.GenreTypes
@@ -42,8 +61,11 @@ namespace Vidly.Controllers
                              join g in _context.GenreTypes on m.GenreTypeId equals g.Id
                              select m).Include("GenreType");
 
+
+
             if (!String.IsNullOrEmpty(searchString))
             {
+                page = 1;
                 movies = movies.Where(m => m.Name.Contains(searchString));
             }
 
@@ -52,11 +74,39 @@ namespace Vidly.Controllers
                 movies = movies.Where(m => m.GenreType.Name.Contains(movieGenre));
             }
 
-            /*
-            var movies = tempMovies.ToList();
-            */
-            //tempMovies = tempMovies.ToList();
-            return View(movies);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    movies = movies.OrderByDescending(m => m.Name);
+                    break;
+                case "Date":
+                    movies = movies.OrderBy(m => m.ReleaseDate);
+                    break;
+                case "date_desc":
+                    movies = movies.OrderByDescending(m => m.ReleaseDate);
+                    break;
+                case "Genre":
+                    movies = movies.OrderBy(m => m.GenreType.Name);
+                    break;
+                case "genre_desc":
+                    movies = movies.OrderByDescending(m => m.GenreType.Name);
+                    break;
+                case "Items":
+                    movies = movies.OrderBy(m => m.NumberInStock);
+                    break;
+                case "items_desc":
+                    movies = movies.OrderByDescending(m => m.NumberInStock);
+                    break;
+                default:
+                    movies = movies.OrderBy(m => m.Name);
+                    break;
+            }
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+
+            return View(movies.ToPagedList(pageNumber, pageSize));
             }
 
         // GET: Details

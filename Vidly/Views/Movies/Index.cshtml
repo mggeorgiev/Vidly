@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Vidly.Models.Movie>
+﻿@*@model IEnumerable<Vidly.Models.Movie>*@
+    @model PagedList.IPagedList<Vidly.Models.Movie>
+    @using PagedList.Mvc;
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Movies";
@@ -16,7 +19,7 @@
 
     <div class="form-inline">
         Title: @Html.TextBox("SearchString", null, new { @class = "form-control" })
-        Genre: @Html.DropDownList("movieGenre",null, "All", new { @class = "form-control"})
+        Genre: @Html.DropDownList("movieGenre", null, "All", new { @class = "form-control" })
         <input class="btn btn-info" type="submit" value="Filter" />
         <p></p>
     </div>
@@ -25,9 +28,9 @@
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
-            <th>Movie</th>
-            <th>Genre</th>
-            <th>Items in Stock</th>
+            <th>@Html.ActionLink("Movie", "Index", new { sortOrder = ViewBag.NameSortParm, movieGenre = ViewBag.CurrentGenre, searchString = ViewBag.CurrentSearch })</th>
+            <th>@Html.ActionLink("Genre", "Index", new { sortOrder = ViewBag.GenreSortParam, movieGenre = ViewBag.CurrentGenre, searchString = ViewBag.CurrentSearch })</th>
+            <th>@Html.ActionLink("Items in Stock", "Index", new { sortOrder = ViewBag.ItemsSortParam, movieGenre = ViewBag.CurrentGenre, searchString = ViewBag.CurrentSearch })</th>
         </tr>
     </thead>
     <tbody>
@@ -41,3 +44,8 @@
         }
     </tbody>
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
