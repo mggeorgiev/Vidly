@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Vidly.Models.Customer>
+﻿@*@model IEnumerable<Vidly.Models.Customer>*@
+@model PagedList.IPagedList<Vidly.Models.Customer>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Customers";
@@ -14,10 +17,20 @@
 else
 {
     <div>
-        @Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-success" })
-
-        <p></p>
+        <p>@Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-success" })</p>
     </div>
+
+    using (Html.BeginForm("Index", "Customers", FormMethod.Get))
+    {
+
+        <div class="form-inline">
+            Name: @Html.TextBox("SearchString", null, new { @class = "form-control" })
+            Genre: @Html.DropDownList("discountRate", null, "All", new { @class = "form-control" })
+            <input class="btn btn-info" type="submit" value="Filter" />
+            <p></p>
+        </div>
+    }
+
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -32,9 +45,14 @@ else
                     @Html.ActionLink(customer.Name, "Edit", "Customers", new { id = customer.Id }, null)
                 </td>
                 <td>
-                    @customer.MembershipType.Name 
+                    @customer.MembershipType.Name
                 </td>
             </tr>
         }
     </table>
 }
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
