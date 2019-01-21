@@ -63,7 +63,11 @@ namespace Vidly.Controllers
         public ViewResult Index(string discountRate, string searchString, string sortOrder, string currentFilter, int? page)
         {
             ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.SortOrder = sortOrder;
+            ViewBag.DiscountSortParam = sortOrder == "Discount" ? "discount_desc" : "Discount";
+            ViewBag.CurrentDiscount = discountRate;
+            ViewBag.CurrentSearch = searchString;
+            ViewBag.CurrentSort = sortOrder;
+
 
             var discountRateLst = new List<string>();
 
@@ -103,11 +107,11 @@ namespace Vidly.Controllers
                 case "name_desc":
                     customers = customers.OrderByDescending(c => c.Name);
                     break;
-                case "Date":
-                    customers = customers.OrderBy(c => c.DateOfBirth);
+                case "Discount":
+                    customers = customers.OrderBy(c => c.MembershipType.DiscountRate);
                     break;
-                case "date_desc":
-                    customers = customers.OrderByDescending(c => c.DateOfBirth);
+                case "discount_desc":
+                    customers = customers.OrderByDescending(c => c.MembershipType.DiscountRate);
                     break;
                 default:
                     customers = customers.OrderBy(c => c.Name);
