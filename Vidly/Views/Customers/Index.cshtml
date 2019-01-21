@@ -10,16 +10,16 @@
 
 <h2>Customers</h2>
 
+<div>
+    <p>@Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-success" })</p>
+</div>
+
 @if (!Model.Any())
 {
     <p>We do not have customers yet.</p>
 }
 else
 {
-    <div>
-        <p>@Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-success" })</p>
-    </div>
-
     using (Html.BeginForm("Index", "Customers", FormMethod.Get))
     {
 
