@@ -34,8 +34,8 @@ else
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th>@Html.ActionLink("Customers", "Index", new { sortOrder = ViewBag.NameSortParm, movieGenre = ViewBag.CurrentGenre, searchString = ViewBag.CurrentSearch })</th>
-                <th>@Html.ActionLink("Discount Rate", "Index", new { sortOrder = ViewBag.GenreSortParam, discountRate = ViewBag.CurrentGenre, searchString = ViewBag.CurrentSearch })</th>
+                <th>@Html.ActionLink("Customers", "Index",     new { sortOrder = ViewBag.NameSortParam,      discountRate = ViewBag.CurrentDiscount, searchString = ViewBag.CurrentSearch })</th>
+                <th>@Html.ActionLink("Discount Rate", "Index", new { sortOrder = ViewBag.DiscountSortParam, discountRate = ViewBag.CurrentDiscount, searchString = ViewBag.CurrentSearch })</th>
             </tr>
         </thead>
         @foreach (var customer in Model)
