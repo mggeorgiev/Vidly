@@ -39,7 +39,17 @@ namespace Vidly.Controllers
         [HttpPost] //do not alow to be called from the get method
         public ActionResult Save(Customer customer)
         {
-            if(customer.Id == 0)
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipType = _context.MembershipTypes.ToList()
+                };
+                return View("CustomerForm", viewModel);
+            }
+
+            if (customer.Id == 0)
             {
                 _context.Customers.Add(customer);
             }
