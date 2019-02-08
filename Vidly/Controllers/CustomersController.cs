@@ -3,8 +3,10 @@ using System.Web.Mvc;
 using System.Linq;
 using System.Data.Entity;
 using Vidly.Models;
+using PagedList;
 
 using Vidly.ViewModels;
+using System;
 
 namespace Vidly.Controllers
 {
@@ -46,9 +48,9 @@ namespace Vidly.Controllers
                     Customer = customer,
                     MembershipType = _context.MembershipTypes.ToList()
                 };
+
                 return View("CustomerForm", viewModel);
             }
-
             if (customer.Id == 0)
             {
                 _context.Customers.Add(customer);
@@ -59,6 +61,7 @@ namespace Vidly.Controllers
 
                 customerInDB.Id = customer.Id;
                 customerInDB.Name = customer.Name;
+                customerInDB.DateOfBirth = customer.DateOfBirth;
                 customerInDB.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
                 customerInDB.MembershipTypeId = customer.MembershipTypeId;
             }
@@ -68,15 +71,68 @@ namespace Vidly.Controllers
             return RedirectToAction("Index", "Customers");
         }
 
-        public ViewResult Index()
+        public ViewResult Index(string discountRate, string searchString, string sortOrder, string currentFilter, int? page)
         {
+            ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DiscountSortParam = sortOrder == "Discount" ? "discount_desc" : "Discount";
+            ViewBag.CurrentDiscount = discountRate;
+            ViewBag.CurrentSearch = searchString;
+            ViewBag.CurrentSort = sortOrder;
+
+
+            var discountRateLst = new List<string>();
+
+            var discountRateQry = from m in _context.MembershipTypes
+                           orderby m.Name
+                           select m.Name;
+
+            discountRateLst.AddRange(discountRateQry.Distinct());
+
+
+            ViewBag.discountRate = new SelectList(discountRateLst);
+
             //defered execution - executed during iteration over the customers object
             //var customers = _context.Customers;
 
             //imediate execution
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+            //var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+            var customers = (from c in _context.Customers
+                             join m in _context.MembershipTypes on c.MembershipTypeId equals m.Id
+                             select c).Include("MembershipType");
 
-            return View(customers);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                page = 1;
+                customers = customers.Where(c => c.Name.Contains(searchString));
+            }
+
+            if (!String.IsNullOrEmpty(discountRate))
+            {
+                customers = customers.Where(c => c.MembershipType.Name.Contains(discountRate));
+            }
+
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    customers = customers.OrderByDescending(c => c.Name);
+                    break;
+                case "Discount":
+                    customers = customers.OrderBy(c => c.MembershipType.DiscountRate);
+                    break;
+                case "discount_desc":
+                    customers = customers.OrderByDescending(c => c.MembershipType.DiscountRate);
+                    break;
+                default:
+                    customers = customers.OrderBy(c => c.Name);
+                    break;
+            }
+
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
+            return View(customers.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Details(int id)

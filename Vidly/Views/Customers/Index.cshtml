@@ -1,4 +1,7 @@
-﻿@model IEnumerable<Vidly.Models.Customer>
+﻿@*@model IEnumerable<Vidly.Models.Customer>*@
+@model PagedList.IPagedList<Vidly.Models.Customer>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Customers";
@@ -7,22 +10,32 @@
 
 <h2>Customers</h2>
 
+<div>
+    <p>@Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-success" })</p>
+</div>
+
 @if (!Model.Any())
 {
     <p>We do not have customers yet.</p>
 }
 else
 {
-    <div>
-        @Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-success" })
+    using (Html.BeginForm("Index", "Customers", FormMethod.Get))
+    {
 
-        <p></p>
-    </div>
+        <div class="form-inline">
+            Name: @Html.TextBox("SearchString", null, new { @class = "form-control" })
+            Genre: @Html.DropDownList("discountRate", null, "All", new { @class = "form-control" })
+            <input class="btn btn-info" type="submit" value="Filter" />
+            <p></p>
+        </div>
+    }
+
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th>Customers</th>
-                <th>Discount Rate</th>
+                <th>@Html.ActionLink("Customers", "Index",     new { sortOrder = ViewBag.NameSortParam,      discountRate = ViewBag.CurrentDiscount, searchString = ViewBag.CurrentSearch })</th>
+                <th>@Html.ActionLink("Discount Rate", "Index", new { sortOrder = ViewBag.DiscountSortParam, discountRate = ViewBag.CurrentDiscount, searchString = ViewBag.CurrentSearch })</th>
             </tr>
         </thead>
         @foreach (var customer in Model)
@@ -32,9 +45,14 @@ else
                     @Html.ActionLink(customer.Name, "Edit", "Customers", new { id = customer.Id }, null)
                 </td>
                 <td>
-                    @customer.MembershipType.Name 
+                    @customer.MembershipType.Name
                 </td>
             </tr>
         }
     </table>
 }
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
