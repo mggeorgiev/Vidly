@@ -33,13 +33,14 @@ namespace Vidly.Controllers
 
             var viewModel = new CustomerFormViewModel
             {
-                Customer = new Customer(),
+                //Customer = new Customer(),
                 MembershipType = membershipTypes
             };
             return View("CustomerForm", viewModel);
         }
         
         [HttpPost] //do not alow to be called from the get method
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Customer customer)
         {
             if (!ModelState.IsValid)
