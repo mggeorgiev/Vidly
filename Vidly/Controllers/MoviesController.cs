@@ -173,7 +173,11 @@ namespace Vidly.Controllers
 
             var viewModel = new MovieFormViewModel
             {
-                GenreTypes = genreTypes
+                GenreTypes = genreTypes,
+                Movie = new Movie
+                {
+                    DateAdded = DateTime.Now
+                } 
             };
 
             return View("MovieForm", viewModel);
