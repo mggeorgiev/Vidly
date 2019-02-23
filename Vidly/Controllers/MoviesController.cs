@@ -138,7 +138,7 @@ namespace Vidly.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var viewModel = new MovieFormViewModel
+                var viewModel = new MovieFormViewModel(movie)
                 {
                     GenreTypes = _context.GenreTypes.ToList()
                 };
