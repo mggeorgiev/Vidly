@@ -4,55 +4,49 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@if (Model.Movie != null)
-{
-    <h2>Edit Movie - @Model.Movie.Name</h2>
-}
-else
-{
-    <h2>Fill the Movie Form to add an additional</h2>
-}
+<h2>@Model.Title</h2>
+
 
 @using (Html.BeginForm("Save", "Movies"))
 {
     @Html.ValidationSummary()
     <div class="form-group">
-        @Html.LabelFor(m => m.Movie.Name)
-        @Html.TextBoxFor(m => m.Movie.Name, new { @class = "form-control", placeholder = @Html.DisplayNameFor(m => m.Movie.Name) })
-        @Html.ValidationMessageFor(m => m.Movie.Name)
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = @Html.DisplayNameFor(m => m.Name) })
+        @Html.ValidationMessageFor(m => m.Name)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Movie.ReleaseDate)
-        @Html.TextBoxFor(m => m.Movie.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control", placeholder = @Html.DisplayNameFor(m => m.Movie.ReleaseDate) })
-        @Html.ValidationMessageFor(m => m.Movie.ReleaseDate)
+        @Html.LabelFor(m => m.ReleaseDate)
+        @Html.TextBoxFor(m => m.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control", placeholder = @Html.DisplayNameFor(m => m.ReleaseDate) })
+        @Html.ValidationMessageFor(m => m.ReleaseDate)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Movie.GenreTypeId)
-        @Html.DropDownListFor(m => m.Movie.GenreTypeId, new SelectList(Model.GenreTypes, "Id", "Name"), "Select Movie Genre", new { @class = "form-control" })
-        @Html.ValidationMessageFor(m => m.Movie.GenreTypeId)
+        @Html.LabelFor(m => m.GenreTypeId)
+        @Html.DropDownListFor(m => m.GenreTypeId, new SelectList(Model.GenreTypes, "Id", "Name"), "Select Movie Genre", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.GenreTypeId)
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Movie.NumberInStock)
-        @Html.TextBoxFor(m => m.Movie.NumberInStock, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.Movie.NumberInStock) })
-        @Html.ValidationMessageFor(m => m.Movie.NumberInStock)
+        @Html.LabelFor(m => m.NumberInStock)
+        @Html.TextBoxFor(m => m.NumberInStock, new { @class = "form-control", placeholder = Html.DisplayNameFor(m => m.NumberInStock) })
+        @Html.ValidationMessageFor(m => m.NumberInStock)
     </div>
-    if (Model.Movie != null)
+    if (Model != null)
     {
         <div class="form-group">
-            @Html.LabelFor(m => m.Movie.DateAdded)
-            @Html.TextBoxFor(m => m.Movie.DateAdded, "{0:d MMM yyyy}", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Movie.DateAdded)
+            @Html.LabelFor(m => m.DateAdded)
+            @Html.TextBoxFor(m => m.DateAdded, "{0:d MMM yyyy}", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DateAdded)
         </div>
     }
     else
     {
         <div class="form-group">
-            @Html.LabelFor(m => m.Movie.DateAdded)
-            @Html.TextBoxFor(m => m.Movie.DateAdded, "{0:d MMM yyyy}", new { @class = "form-control", @Value = DateTime.Now.ToShortDateString() })
-            @Html.ValidationMessageFor(m => m.Movie.DateAdded)
+            @Html.LabelFor(m => m.DateAdded)
+            @Html.TextBoxFor(m => m.DateAdded, "{0:d MMM yyyy}", new { @class = "form-control", @Value = DateTime.Now.ToShortDateString() })
+            @Html.ValidationMessageFor(m => m.DateAdded)
         </div>
     }
-    @Html.HiddenFor(m => m.Movie.Id)
+    @Html.HiddenFor(m => m.Id)
 
     <div class="form-group">
         <button class="btn btn-primary">Save</button>
